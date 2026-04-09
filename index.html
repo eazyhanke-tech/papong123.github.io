@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Topup Store | ร้านเติมเกม</title>
+    <title>Game Topup Store | Animation Edition</title>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
 
         body {
             font-family: 'Kanit', sans-serif;
-            background-color: #0f0c29;
-            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
             color: #fff;
             margin: 0;
             padding: 20px;
@@ -19,6 +18,7 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         header {
@@ -29,194 +29,181 @@
         header h1 {
             font-size: 2.5rem;
             color: #00d2ff;
-            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+            text-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
         }
 
-        /* ส่วนปุ่มเลือกเกม */
+        /* ปุ่มเลือกเกม */
         .game-selection {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
             justify-content: center;
             margin-bottom: 30px;
+            z-index: 10;
         }
 
         .game-btn {
-            background: #16213e;
-            color: #00d2ff;
-            border: 2px solid #00d2ff;
-            padding: 15px 25px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            background: rgba(22, 33, 62, 0.7);
+            color: #fff;
+            border: 1px solid #e94560;
+            padding: 12px 25px;
+            font-size: 1rem;
             cursor: pointer;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 50px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .game-btn:hover {
-            background: #00d2ff;
-            color: #16213e;
-            transform: translateY(-3px);
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+            background: #e94560;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px #e94560;
         }
 
-        /* ส่วนตารางราคา */
-        .price-table-container {
+        /* Container สำหรับตารางที่ใช้ทำ Animation */
+        .table-wrapper {
             width: 100%;
-            max-width: 800px;
-            background: rgba(22, 33, 62, 0.8);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
+            max-width: 700px;
+            perspective: 1000px;
+        }
+
+        .price-table-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none; /* ซ่อนไว้ก่อน */
-            animation: slideUp 0.4s ease-out;
+            display: none; /* เริ่มต้นซ่อนไว้ */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* คลาสสำหรับ Animation ขาขึ้น (โผล่มา) */
+        .slide-up {
+            display: block !important;
+            animation: slideInUp 0.6s ease forwards;
         }
 
-        h2 {
-            text-align: center;
-            color: #e94560;
-            margin-bottom: 20px;
+        /* คลาสสำหรับ Animation ขาลง (หายไป) */
+        .slide-down {
+            animation: slideOutDown 0.4s ease forwards;
         }
+
+        @keyframes slideInUp {
+            0% { opacity: 0; transform: translateY(100px) rotateX(-15deg); }
+            100% { opacity: 1; transform: translateY(0) rotateX(0); }
+        }
+
+        @keyframes slideOutDown {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(100px); }
+        }
+
+        h2 { text-align: center; color: #00d2ff; }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            overflow: hidden;
-            border-radius: 10px;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
         }
 
         th {
-            background-color: #e94560;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            background: #e94560;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
         }
 
-        tr:hover {
-            background-color: rgba(255, 255, 255, 0.05);
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
         }
 
         .buy-btn {
-            background: linear-gradient(45deg, #11998e, #38ef7d);
-            color: white;
+            background: #00d2ff;
             border: none;
-            padding: 8px 18px;
-            border-radius: 20px;
+            padding: 7px 15px;
+            border-radius: 5px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.3s;
         }
 
-        .buy-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(56, 239, 125, 0.6);
-        }
+        .buy-btn:hover { background: #fff; color: #000; }
 
-        @media (max-width: 600px) {
-            .game-btn { width: 100%; }
-            table { font-size: 0.9rem; }
-        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>TOPUP CENTER</h1>
-        <p>บริการเติมเกมรวดเร็ว ทันใจ 24 ชม.</p>
+        <h1>TOPUP SHOP</h1>
+        <p>เลือกเกมเพื่อดูราคาแพ็คเกจ</p>
     </header>
 
-    <main>
-        <section class="game-selection">
-            <button class="game-btn" onclick="showPrices('VALORANT')">VALORANT</button>
-            <button class="game-btn" onclick="showPrices('ROV')">ROV</button>
-            <button class="game-btn" onclick="showPrices('FREE FIRE')">FREE FIRE</button>
-            <button class="game-btn" onclick="showPrices('GENSHIN')">GENSHIN IMPACT</button>
-        </section>
+    <div class="game-selection">
+        <button class="game-btn" onclick="updateView('VALORANT')">VALORANT</button>
+        <button class="game-btn" onclick="updateView('ROV')">ROV</button>
+        <button class="game-btn" onclick="updateView('FREE FIRE')">FREE FIRE</button>
+    </div>
 
+    <div class="table-wrapper">
         <section id="price-section" class="price-table-container">
-            <h2 id="selected-game-title">รายการแพ็คเกจ</h2>
+            <h2 id="selected-game-title">ตารางราคา</h2>
             <table>
                 <thead>
                     <tr>
-                        <th>สินค้า</th>
+                        <th>ไอเทม</th>
                         <th>ราคา</th>
-                        <th></th>
+                        <th>ซื้อ</th>
                     </tr>
                 </thead>
-                <tbody id="price-data">
-                    </tbody>
+                <tbody id="price-data"></tbody>
             </table>
         </section>
-    </main>
+    </div>
 
     <script>
         const gameData = {
-            'VALORANT': [
-                { item: '500 VP', price: '150 ฿' },
-                { item: '1,000 VP', price: '290 ฿' },
-                { item: '2,500 VP', price: '700 ฿' },
-                { item: '5,000 VP', price: '1,350 ฿' }
-            ],
-            'ROV': [
-                { item: '20 คูปอง', price: '15 ฿' },
-                { item: '100 คูปอง', price: '70 ฿' },
-                { item: '500 คูปอง', price: '340 ฿' },
-                { item: '1,000 คูปอง', price: '650 ฿' }
-            ],
-            'FREE FIRE': [
-                { item: '100 Diamonds', price: '35 ฿' },
-                { item: '500 Diamonds', price: '165 ฿' },
-                { item: '1,000 Diamonds', price: '320 ฿' }
-            ],
-            'GENSHIN': [
-                { item: 'Blessing Moon', price: '150 ฿' },
-                { item: 'Genesis Crystal x60', price: '30 ฿' },
-                { item: 'Genesis Crystal x300', price: '140 ฿' }
-            ]
+            'VALORANT': [{i:'500 VP', p:'150.-'}, {i:'1000 VP', p:'295.-'}],
+            'ROV': [{i:'20 คูปอง', p:'15.-'}, {i:'100 คูปอง', p:'75.-'}],
+            'FREE FIRE': [{i:'100 Diamonds', p:'35.-'}, {i:'500 Diamonds', p:'160.-'}]
         };
 
-        function showPrices(gameName) {
+        function updateView(gameName) {
             const section = document.getElementById('price-section');
-            const title = document.getElementById('selected-game-title');
-            const tbody = document.getElementById('price-data');
-
-            // แสดงตารางและเปลี่ยนชื่อหัวข้อ
-            section.style.display = 'block';
-            title.innerText = 'แพ็คเกจราคา: ' + gameName;
-
-            // ล้างข้อมูลเก่าออกก่อน
-            tbody.innerHTML = '';
-
-            // ดึงข้อมูลมาวนลูปสร้างแถวในตาราง
-            gameData[gameName].forEach(data => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${data.item}</td>
-                    <td style="color: #00d2ff; font-weight: bold;">${data.price}</td>
-                    <td style="text-align: right;">
-                        <button class="buy-btn" onclick="checkout('${gameName}', '${data.item}')">สั่งซื้อ</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
+            
+            // ถ้าตารางแสดงอยู่แล้ว ให้ทำอนิเมชั่น "ลง" ก่อนแล้วค่อย "ขึ้น" ใหม่
+            if (section.classList.contains('slide-up')) {
+                section.classList.add('slide-down');
+                
+                setTimeout(() => {
+                    renderTable(gameName);
+                    section.classList.remove('slide-down');
+                    // บังคับให้ Browser วาดใหม่ (Reflow) เพื่อเล่นอนิเมชั่นขึ้นใหม่
+                    section.style.animation = 'none';
+                    section.offsetHeight; 
+                    section.style.animation = null;
+                }, 400); // รอให้ Slide Down จบก่อน
+            } else {
+                renderTable(gameName);
+                section.classList.add('slide-up');
+            }
         }
 
-        function checkout(game, item) {
-            alert(`คุณเลือกซื้อ: ${item} ของเกม ${game}\n(คุณสามารถเชื่อมต่อไปยังระบบชำระเงินหรือ Line ในขั้นตอนนี้)`);
+        function renderTable(gameName) {
+            const title = document.getElementById('selected-game-title');
+            const tbody = document.getElementById('price-data');
+            
+            title.innerText = gameName;
+            tbody.innerHTML = '';
+            
+            gameData[gameName].forEach(data => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${data.i}</td>
+                        <td style="color:#e94560; font-weight:600;">${data.p}</td>
+                        <td><button class="buy-btn" onclick="alert('กำลังไปหน้าชำระเงิน...')">BUY</button></td>
+                    </tr>
+                `;
+            });
         }
     </script>
 </body>
