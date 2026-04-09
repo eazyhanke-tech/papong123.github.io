@@ -1,83 +1,223 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-    <title>Papong Service</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>Game Topup Store | ร้านเติมเกม</title>
+    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
+
         body {
-            font-family: Arial;
+            font-family: 'Kanit', sans-serif;
+            background-color: #0f0c29;
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            color: #fff;
             margin: 0;
-            background: #0f172a;
-            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            margin-bottom: 40px;
             text-align: center;
         }
 
-        .header {
-            padding: 30px;
-            background: #1e293b;
+        header h1 {
+            font-size: 2.5rem;
+            color: #00d2ff;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
         }
 
-        .section {
-            margin: 20px;
-            padding: 20px;
-            background: #1e293b;
+        /* ส่วนปุ่มเลือกเกม */
+        .game-selection {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .game-btn {
+            background: #16213e;
+            color: #00d2ff;
+            border: 2px solid #00d2ff;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
             border-radius: 12px;
-        } 
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
 
-        .btn {
-            display: inline-block;
-            margin: 10px;
-            padding: 12px 20px;
-            background: #22c55e;
-            color: black;
-            border-radius: 8px;
-            text-decoration: none;
+        .game-btn:hover {
+            background: #00d2ff;
+            color: #16213e;
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+        }
+
+        /* ส่วนตารางราคา */
+        .price-table-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(22, 33, 62, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none; /* ซ่อนไว้ก่อน */
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            text-align: center;
+            color: #e94560;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background-color: #e94560;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .buy-btn {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
             font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        .btn:hover {
-            background: #16a34a;
+        .buy-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(56, 239, 125, 0.6);
         }
 
+        @media (max-width: 600px) {
+            .game-btn { width: 100%; }
+            table { font-size: 0.9rem; }
+        }
     </style>
 </head>
-
 <body>
 
-    <div class="header">
-        <h1>🎮 Papong Service</h1>
-        <p>เติมเกม | ออกแบบโลโก้ | เว็บราคาถูก</p>
-    </div>
+    <header>
+        <h1>TOPUP CENTER</h1>
+        <p>บริการเติมเกมรวดเร็ว ทันใจ 24 ชม.</p>
+    </header>
 
-    <div class="section">
-        <h2>💎 เติมเกม</h2>
-        <p>Roblox / Free Fire / PUBG</p>
-        <p>ราคาถูก ปลอดภัย เติมไว</p>
-    </div>
+    <main>
+        <section class="game-selection">
+            <button class="game-btn" onclick="showPrices('VALORANT')">VALORANT</button>
+            <button class="game-btn" onclick="showPrices('ROV')">ROV</button>
+            <button class="game-btn" onclick="showPrices('FREE FIRE')">FREE FIRE</button>
+            <button class="game-btn" onclick="showPrices('GENSHIN')">GENSHIN IMPACT</button>
+        </section>
 
-    <div class="section">
-        <h2>🎨 ออกแบบโลโก้</h2>
-        <p>เริ่มต้น 100 บาท</p>
-        <p>ส่งงานไว แก้ได้</p>
-    </div>
+        <section id="price-section" class="price-table-container">
+            <h2 id="selected-game-title">รายการแพ็คเกจ</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>สินค้า</th>
+                        <th>ราคา</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="price-data">
+                    </tbody>
+            </table>
+        </section>
+    </main>
 
-<!-- update -->
-    
-    <div class="section">
-        <h2>🌐 ทำเว็บไซต์</h2>
-        <p>เว็บร้านค้า / เว็บโปรไฟล์</p>
-        <p>เริ่มต้น 300 บาท</p>
-    </div>
+    <script>
+        const gameData = {
+            'VALORANT': [
+                { item: '500 VP', price: '150 ฿' },
+                { item: '1,000 VP', price: '290 ฿' },
+                { item: '2,500 VP', price: '700 ฿' },
+                { item: '5,000 VP', price: '1,350 ฿' }
+            ],
+            'ROV': [
+                { item: '20 คูปอง', price: '15 ฿' },
+                { item: '100 คูปอง', price: '70 ฿' },
+                { item: '500 คูปอง', price: '340 ฿' },
+                { item: '1,000 คูปอง', price: '650 ฿' }
+            ],
+            'FREE FIRE': [
+                { item: '100 Diamonds', price: '35 ฿' },
+                { item: '500 Diamonds', price: '165 ฿' },
+                { item: '1,000 Diamonds', price: '320 ฿' }
+            ],
+            'GENSHIN': [
+                { item: 'Blessing Moon', price: '150 ฿' },
+                { item: 'Genesis Crystal x60', price: '30 ฿' },
+                { item: 'Genesis Crystal x300', price: '140 ฿' }
+            ]
+        };
 
-    <div class="section">
-        <h2>📞 ติดต่อ</h2>
+        function showPrices(gameName) {
+            const section = document.getElementById('price-section');
+            const title = document.getElementById('selected-game-title');
+            const tbody = document.getElementById('price-data');
 
-        <a class="btn" href="https://line.me/">💬 แชท LINE</a>
-        <a class="btn" href="https://facebook.com/">📘 Facebook</a>
+            // แสดงตารางและเปลี่ยนชื่อหัวข้อ
+            section.style.display = 'block';
+            title.innerText = 'แพ็คเกจราคา: ' + gameName;
 
-        <p>หรือทัก DM ได้เลย</p>
-    </div>
+            // ล้างข้อมูลเก่าออกก่อน
+            tbody.innerHTML = '';
 
+            // ดึงข้อมูลมาวนลูปสร้างแถวในตาราง
+            gameData[gameName].forEach(data => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.item}</td>
+                    <td style="color: #00d2ff; font-weight: bold;">${data.price}</td>
+                    <td style="text-align: right;">
+                        <button class="buy-btn" onclick="checkout('${gameName}', '${data.item}')">สั่งซื้อ</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function checkout(game, item) {
+            alert(`คุณเลือกซื้อ: ${item} ของเกม ${game}\n(คุณสามารถเชื่อมต่อไปยังระบบชำระเงินหรือ Line ในขั้นตอนนี้)`);
+        }
+    </script>
 </body>
 </html>
