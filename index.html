@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GG TOPUP CENTER | ร้านเติมเกมของป้อง</title>
+    <title>GG TOPUP CENTER | ระบบเติมเกมอัตโนมัติ</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
 
-        /* --- CSS เดิมที่ปรับปรุงใหม่ --- */
         body {
             font-family: 'Kanit', sans-serif;
             background: #080a10;
@@ -17,65 +16,65 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
         header { margin: 30px 0; text-align: center; }
-        header h1 { color: #00d2ff; text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+        header h1 { color: #00d2ff; text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); margin: 0; }
+        header p { color: #888; font-size: 0.9rem; margin-top: 5px; }
 
         .game-nav { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center; }
         .nav-btn {
             background: #1a1f26; color: #aaa; border: 1px solid #30363d;
-            padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: 0.3s;
+            padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: 600; transition: 0.3s;
         }
-        .nav-btn.active { background: #e94560; color: #fff; border-color: #e94560; box-shadow: 0 0 20px rgba(233, 69, 96, 0.5); }
+        .nav-btn.active { background: #e94560; color: #fff; border-color: #e94560; box-shadow: 0 0 20px rgba(233, 69, 96, 0.4); }
 
-        .content-area { width: 90%; max-width: 650px; position: relative; margin-bottom: 50px; }
+        .content-area { width: 95%; max-width: 600px; }
         .price-card {
             background: #11141a; border-radius: 20px; overflow: hidden; border: 1px solid #21262d;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.7); opacity: 0; display: none;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: none;
         }
-        .price-card.show { display: block; animation: slideInSmooth 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
-        .price-card.hide { display: block; animation: slideOutSmooth 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+        .price-card.show { display: block; animation: fadeInUp 0.5s ease forwards; }
 
-        @keyframes slideInSmooth { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideOutSmooth { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-50px); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .poster-container { width: 100%; height: 250px; overflow: hidden; position: relative; }
+        .poster-container { width: 100%; height: 220px; overflow: hidden; position: relative; }
         .poster-container img { width: 100%; height: 100%; object-fit: cover; }
-        .poster-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, rgba(17,20,26,1), rgba(17,20,26,0)); }
-        .poster-title { position: absolute; bottom: 20px; left: 25px; margin: 0; font-size: 2rem; }
+        .poster-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(to top, #11141a, transparent); }
+        .poster-title { position: absolute; bottom: 15px; left: 20px; margin: 0; font-size: 1.8rem; font-weight: 600; }
 
-        .table-container { padding: 25px; }
+        .table-container { padding: 20px; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: #888; padding-bottom: 15px; border-bottom: 1px solid #21262d; font-size: 0.85rem; }
-        td { padding: 18px 0; border-bottom: 1px solid #1a1f26; }
-        .package-price { color: #e94560; font-weight: 600; margin-right: 10px; }
+        td { padding: 15px 0; border-bottom: 1px solid #1a1f26; }
+        .package-name { font-weight: 400; font-size: 1.1rem; }
+        .package-price { color: #e94560; font-weight: 600; margin-right: 15px; font-size: 1.1rem; }
 
         .buy-btn {
             background: linear-gradient(45deg, #11998e, #38ef7d); color: #fff; border: none;
-            padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; float: right;
+            padding: 8px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: 'Kanit';
         }
 
-        /* --- CSS ส่วน Modal ชำระเงิน (ใหม่) --- */
+        /* Modal ชำระเงิน */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center;
-            z-index: 1000; backdrop-filter: blur(10px);
+            z-index: 1000; backdrop-filter: blur(8px);
         }
         .modal-card {
-            background: #161b22; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px;
+            background: #161b22; padding: 25px; border-radius: 20px; width: 85%; max-width: 380px;
             text-align: center; border: 1px solid #30363d; position: relative;
         }
-        .close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
-        #pp-qr { width: 220px; border-radius: 10px; background: #fff; padding: 10px; margin: 15px 0; }
+        .close-btn { position: absolute; top: 15px; right: 20px; background: none; border: none; color: #888; font-size: 28px; cursor: pointer; }
+        #pp-qr { width: 200px; border-radius: 10px; background: #fff; padding: 10px; margin: 15px 0; border: 5px solid #fff; }
+        
+        .input-group { text-align: left; margin-top: 20px; border-top: 1px solid #333; padding-top: 20px; }
         #gift-link {
             width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #30363d;
-            background: #0d1117; color: #fff; box-sizing: border-box;
+            background: #0d1117; color: #fff; box-sizing: border-box; font-family: 'Kanit';
         }
         .submit-btn {
-            background: #e94560; color: #fff; border: none; padding: 15px; border-radius: 8px;
-            width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px;
+            background: #e94560; color: #fff; border: none; padding: 14px; border-radius: 8px;
+            width: 100%; font-weight: bold; cursor: pointer; font-family: 'Kanit'; font-size: 1rem;
         }
     </style>
 </head>
@@ -83,30 +82,24 @@
 
     <header>
         <h1>GG TOPUP CENTER</h1>
-        <p>เติมง่าย ได้ไว ปลอดภัย 100%</p>
+        <p>บริการเติมเกมรวดเร็ว ปลอดภัย ไร้กังวล</p>
     </header>
 
     <div class="game-nav">
         <button class="nav-btn" onclick="switchGame('VALORANT', this)">VALORANT</button>
         <button class="nav-btn" onclick="switchGame('ROV', this)">ROV</button>
-        <button class="nav-btn" onclick="switchGame('FF', this)">FREE FIRE</button>
+        <button class="nav-btn" onclick="switchGame('FREE FIRE', this)">FREE FIRE</button>
     </div>
 
     <div class="content-area">
         <div id="price-card" class="price-card">
             <div class="poster-container">
-                <img id="game-poster" src="" alt="Poster">
+                <img id="game-poster" src="" alt="Game Poster">
                 <div class="poster-overlay"></div>
                 <h2 id="game-title" class="poster-title"></h2>
             </div>
             <div class="table-container">
                 <table>
-                    <thead>
-                        <tr>
-                            <th>แพ็คเกจ</th>
-                            <th style="text-align: right;">ราคา</th>
-                        </tr>
-                    </thead>
                     <tbody id="price-list"></tbody>
                 </table>
             </div>
@@ -116,102 +109,109 @@
     <div id="payment-modal" class="modal-overlay">
         <div class="modal-card">
             <button class="close-btn" onclick="closeModal()">&times;</button>
-            <h3 id="m-game"></h3>
-            <p id="m-package" style="color: #00d2ff;"></p>
+            <h3 id="m-game" style="margin-bottom:5px;"></h3>
+            <p id="m-package" style="color: #00d2ff; margin: 0;"></p>
             
-            <div>
-                <img src="" id="pp-qr">
-                <p style="font-size: 0.8rem; color: #888;">สแกนจ่ายแล้ว แจ้งสลิปที่ Line นะครับ</p>
-            </div>
+            <img src="" id="pp-qr">
+            <p style="font-size: 0.8rem; color: #888; margin-bottom: 0;">สแกนจ่ายแล้ว แจ้งสลิปที่ Line นะครับ</p>
 
-            <div style="margin-top: 20px; border-top: 1px solid #333; pt: 20px;">
-                <p style="font-size: 0.9rem;">หรือ ใส่ลิงก์ซองของขวัญ TrueMoney</p>
+            <div class="input-group">
+                <label style="font-size: 0.9rem; color: #bbb;">หรือ วางลิงก์ซองของขวัญ TrueMoney</p>
                 <input type="text" id="gift-link" placeholder="https://gift.truemoney.com/...">
-                <button class="submit-btn" onclick="sendToLine()">แจ้งโอนเงินผ่าน Line</button>
+                <button class="submit-btn" onclick="sendOrder()">ยืนยันและแจ้งโอนเงินผ่าน Line</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- ส่วนข้อมูลเกม (ใส่ชื่อไฟล์รูปภาพของน้องให้เป๊ะ) ---
+        // --- ข้อมูลเกม (แก้ไขชื่อไฟล์รูปภาพที่นี่) ---
         const data = {
             'VALORANT': {
                 poster: 'Valo.png', 
-                packages: [{n: '500 VP', p: '150.-'}, {n: '1000 VP', p: '295.-'}]
+                packages: [{n: '540 VP', p: '150.-'}, {n: '1130 VP', p: '300.-'}, {n: '2420 VP', p: '620.-'}]
             },
             'ROV': {
-                poster: 'ROV.jpg', 
+                poster: 'rov.png', // เปลี่ยนชื่อไฟล์ให้ตรงกับใน GitHub
                 packages: [{n: '20 คูปอง', p: '15.-'}, {n: '100 คูปอง', p: '75.-'}]
             },
-            'FF': {
-                poster: 'FF.jpeg', 
+            'FREE FIRE': {
+                poster: 'ff.png', // เปลี่ยนชื่อไฟล์ให้ตรงกับใน GitHub
                 packages: [{n: '100 Diamonds', p: '35.-'}, {n: '500 Diamonds', p: '160.-'}]
             }
         };
 
-        let currentGame = '';
         let selGame = '';
         let selPackage = '';
 
         function switchGame(game, btn) {
-            if (currentGame === game) return;
-            const card = document.getElementById('price-card');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
-            if (currentGame !== '') {
-                card.classList.remove('show');
-                card.classList.add('hide');
-                setTimeout(() => { renderData(game); card.classList.remove('hide'); card.classList.add('show'); }, 500);
-            } else {
-                renderData(game); card.classList.add('show');
-            }
-            currentGame = game;
+            
+            const card = document.getElementById('price-card');
+            card.classList.remove('show');
+            
+            setTimeout(() => {
+                document.getElementById('game-title').innerText = game;
+                document.getElementById('game-poster').src = data[game].poster;
+                const list = document.getElementById('price-list');
+                list.innerHTML = '';
+                data[game].packages.forEach(item => {
+                    list.innerHTML += `
+                        <tr>
+                            <td class="package-name">${item.n}</td>
+                            <td style="text-align: right;">
+                                <span class="package-price">${item.p}</span>
+                                <button class="buy-btn" onclick="openPayment('${game}', '${item.n}', '${item.p}')">ซื้อเลย</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                card.classList.add('show');
+            }, 100);
         }
 
-        function renderData(game) {
-            document.getElementById('game-title').innerText = game;
-            document.getElementById('game-poster').src = data[game].poster;
-            const list = document.getElementById('price-list');
-            list.innerHTML = '';
-            data[game].packages.forEach(item => {
-                list.innerHTML += `
-                    <tr>
-                        <td style="font-weight:600;">${item.n}</td>
-                        <td style="text-align: right;">
-                            <span class="package-price">${item.p}</span>
-                            <button class="buy-btn" onclick="openPayment('${game}', '${item.n}', '${item.p}')">ซื้อเลย</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        // --- ส่วนระบบชำระเงิน ---
         function openPayment(game, package, priceStr) {
             selGame = game;
             selPackage = package;
-            const price = priceStr.replace(/\D/g, ''); // ดึงเลขราคาออกมา
+            const price = priceStr.replace(/\D/g, ''); 
             
             document.getElementById('m-game').innerText = game;
             document.getElementById('m-package').innerText = package + " ราคา " + price + " บาท";
             
-            // เจน QR PromptPay (เปลี่ยน 000-000-0000 เป็นเบอร์น้อง)
-            document.getElementById('pp-qr').src = `https://promptpay.io/0000000000/${price}.png`;
+            // --- เปลี่ยนเป็นเบอร์พร้อมเพย์ของน้องป้องที่นี่ ---
+            const myPromptPay = "0000000000"; 
+            document.getElementById('pp-qr').src = `https://promptpay.io/${myPromptPay}/${price}.png`;
             
             document.getElementById('payment-modal').style.display = 'flex';
         }
 
         function closeModal() { document.getElementById('payment-modal').style.display = 'none'; }
 
-        function sendToLine() {
-            const gift = document.getElementById('gift-link').value;
-            const lineID = "ใส่ลิงก์ไลน์น้องตรงนี้"; 
-            let msg = `สวัสดีครับ สนใจสั่งซื้อ\n🎮 เกม: ${selGame}\n📦 แพ็คเกจ: ${selPackage}`;
-            if(gift) msg += `\n🎁 ซองทรู: ${gift}`;
-            else msg += `\n💰 โอนผ่านพร้อมเพย์แล้ว (เดี๋ยวส่งสลิปครับ)`;
+        function sendOrder() {
+            const giftLink = document.getElementById('gift-link').value;
+            
+            // --- 1. วางลิ้งก์ Google Script ที่ป้องเพิ่งได้มาตรงนี้ ---
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwhkG-_fVouBGgmdc33FTkDRRuf2OCvcKWcQWYfLHFcpDIa_Fl-WoXi3SYskRlRtRkr/exec';
 
+            // ส่งข้อมูลไป Google Sheets
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    game: selGame,
+                    package: selPackage,
+                    gift: giftLink || 'โอนพร้อมเพย์'
+                })
+            });
+
+            // --- 2. ใส่ลิ้งก์ไลน์ของน้องป้องตรงนี้ ---
+            const lineID = "ไอดีไลน์ของน้อง"; 
+            let msg = `🛒 สั่งซื้อเกม: ${selGame}\n📦 แพ็คเกจ: ${selPackage}\n💰 ข้อมูลการจ่าย: ${giftLink || 'โอนพร้อมเพย์'}\n(เช็กหลังบ้านด้วยนะครับ)`;
+            
             window.open(`https://line.me/ti/p/${lineID}?text=${encodeURIComponent(msg)}`, '_blank');
+            closeModal();
         }
     </script>
 </body>
